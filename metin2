@@ -1,0 +1,7 @@
+
+[Desktop Entry]
+Type=Application
+Name=Metin2Alaska
+Icon=lutris_metin2alaska
+Exec=env LUTRIS_SKIP_INIT=1 lutris lutris:rungameid/4
+Categories=Game
