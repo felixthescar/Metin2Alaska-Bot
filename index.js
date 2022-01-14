@@ -17,15 +17,15 @@ const windowIds = [];
 run();
 function run(){
     
-    //initWindows();
+    initWindows();
 
-    //logIntoAccounts();
+    logIntoAccounts();
 
     //prepareBot();
 
-    getAllActiveWindowsInAList();
+    //getAllActiveWindowsInAList();
     
-    collectItemsAndAttack();
+    //collectItemsAndAttack();
     
 }
 
@@ -95,8 +95,8 @@ function collectItemsAndAttack() {
             var child = execSync(cmd);
             robot.keyTap("z");
             robot.keyToggle("space", "down");
-            wait(4000);
-            robot.keyToggle("space", "up");
+            wait(8000);
+            //robot.keyToggle("space", "up");
         }
     }
 }
