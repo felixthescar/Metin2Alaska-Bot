@@ -2,24 +2,28 @@ const time = require("timers");
 const { execSync,exec } = require("child_process");
 const robot = require("robotjs");
 const readline = require("readline");
-
+const {sendKeys} = require('window-control');
 const accounts = require("./accounts.json");
-const { runMain } = require("module");
-const { getMaxListeners } = require("process");
-const { get } = require("http");
+const { syncFocusWindow, getAllAlaskaProcesses } = require('./windows-lib.js');
 
-var slavesNumber = 4;
+var slavesNumber = 1; //was 4
 
 var children = [];
-var gameWindowsIds = [];
-const windowIds = [];
+var gameWindowIds = [];
+//var gameWindowsIds = [];
+//const windowIds = [];
 
 run();
 function run(){
     
-    initWindows();
+    getAllAlaskaProcesses()
+    .then((data) =>
+    {
+        console.log(data);
+    });
+    //initWindows();
 
-    logIntoAccounts();
+    //logIntoAccounts();
 
     //prepareBot();
 
@@ -46,31 +50,42 @@ function getAllActiveWindowsInAList(){
 
 function getNewWindow() {
 
-    var child = execSync('xdotool search --sync --name 2011');
+    //var child = execSync('xdotool search --sync --name 2011');
     var id = -1;         // ms
     
-    child = child.toString().split("\n");
+    /*child = child.toString().split("\n");
     child.forEach(element => {
         if(windowIds.indexOf(element)==-1&&element!='') {
             id = element;
         }
-    });
+    });*/
+    //console.log(id);
     return id;
 }
 
 function logIntoAccounts() {
     for(var i = 0; i < slavesNumber; i ++) {
-        var windowId = gameWindowsIds[i];
-        console.log("ID: "+windowId);
-        var cmd="xdotool windowactivate --sync ".concat(windowId);
-        var child = execSync(cmd);
-        robot.typeString(accounts.usernames[i]);
-        robot.keyTap("tab");
-        robot.typeString(accounts.passwords[i]);
-        robot.keyTap("enter");
-        wait(4000);
-        robot.keyTap("enter");
-        wait(2000);
+        var windowId = children[i].pid;
+        console.log(windowId);
+        var username = accounts.usernames[i];
+        var password = accounts.passwords[i];
+        sendKeys(windowId, username, {resetFocus: true, pressEnterOnceDone: true})
+            .catch((error) =>
+            {
+                //console.log(error);
+            })
+            .finally(() =>
+            {
+                sendKeys(windowId, password, {resetFocus: true, pressEnterOnceDone: true})
+                    .catch((error) =>
+                    {
+                        //console.log(error);
+                    })
+                    .finally(() =>
+                    {
+                        //console.log("!!!!");
+                    });
+            });
     }
 }
 
@@ -102,17 +117,26 @@ function collectItemsAndAttack() {
 }
 
 function createGameWindow() {
-    var child = exec("./metin2");
+    //create game instance
+    var child = exec("metin2.lnk", (error, stdout, stderr) =>
+    {
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
+        if (error !== null) 
+        {
+            console.log('exec error: ' + error);
+        }
+    });
+    wait(5000);
+    //save cmd pid
     children.push(child);
+    //save alaska2 pid
+    //get all 
 }
 
 function initWindows() {
-    for(var i = 0; i < slavesNumber; i ++) {
-        
+    for(var i = 0; i < slavesNumber; i++) {
         createGameWindow();
-        wait(8000);
-        var id = getNewWindow();
-        gameWindowsIds.push(id);
     }
 }
 

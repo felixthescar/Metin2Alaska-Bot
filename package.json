@@ -9,7 +9,13 @@
   "author": "FelixTheScar",
   "license": "ISC",
   "dependencies": {
+    "@nut-tree/nut-js": "^2.0.1",
+    "node-gyp": "^8.4.1",
+    "node-png": "^0.4.3",
+    "node-powershell": "^5.0.1",
+    "readline-sync": "^1.4.10",
     "robotjs": "^0.6.0",
-    "sprintf-js": "^1.1.2"
+    "sprintf-js": "^1.1.2",
+    "window-control": "^1.4.4"
   }
 }
