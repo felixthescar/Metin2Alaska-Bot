@@ -9,6 +9,7 @@
   "author": "FelixTheScar",
   "license": "ISC",
   "dependencies": {
-    "robotjs": "^0.6.0"
+    "robotjs": "^0.6.0",
+    "sprintf-js": "^1.1.2"
   }
 }
